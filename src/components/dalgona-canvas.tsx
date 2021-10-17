@@ -154,9 +154,18 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         downloadContext.drawImage(backgroundCanvas, 0, 0);
         downloadContext.drawImage(pictureCanvas, 0, 0);
 
-        const url = downloadCanvas.toDataURL();
-        const newWindow = window.open(url, "_blank");
-        newWindow?.focus();
+        const url = downloadCanvas.toDataURL().replace("image/png", "image/octet-stream");
+        // const url = downloadCanvas.toDataURL();
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+            "download",
+            "dalgona.png",
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode?.removeChild(link);
     }
 
     React.useEffect(() => {

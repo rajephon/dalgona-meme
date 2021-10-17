@@ -20,6 +20,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import DownloadIcon from "@mui/icons-material/Download";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import CircularProgress from "@mui/material/CircularProgress";
+import * as gtag from "../utils/gtag";
 
 
 declare namespace IDalgonaForm {
@@ -67,10 +68,17 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
             alert("사용할 이미지를 선택해주세요.");
             return;
         }
+        const start = Date.now();
 
         const imgFileBuf = await imgFile.arrayBuffer();
-
         onClickGenerate(imgFileBuf);
+        const delta = Date.now() - start;
+        gtag.event({
+            action: "generate",
+            category: "click",
+            label: JSON.stringify({elapsed:delta}),
+            value: 0
+        });
     }
 
     const onChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,6 +140,13 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
         const newState:DalgonaState = {...dalgonaState};
         newState.download = true;
         dispatch(changeDalgonaState(newState));
+
+        gtag.event({
+            action: "download",
+            category: "click",
+            label: "",
+            value: 0
+        });
     };
 
     return (
