@@ -155,16 +155,8 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         downloadContext.drawImage(pictureCanvas, 0, 0);
 
         const url = downloadCanvas.toDataURL();
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute(
-            "download",
-            "dalgona.png",
-        );
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode?.removeChild(link);
+        const newWindow = window.open(url, "_blank");
+        newWindow?.focus();
     }
 
     React.useEffect(() => {
