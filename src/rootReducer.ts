@@ -3,9 +3,10 @@
 
 import { combineReducers } from "@reduxjs/toolkit";
 import dalgonaState from './slices/dalgona-state';
+import resultImageState from "./slices/result-image-state";
 
 const reducer = combineReducers({
-    dalgonaState,
+    dalgonaState, resultImageState
 });
 
 export type ReducerType = ReturnType<typeof reducer>;

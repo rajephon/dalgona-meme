@@ -8,6 +8,7 @@ import {ReducerType} from "../rootReducer";
 import {DalgonaState, changeDalgonaState} from "../slices/dalgona-state";
 import backgroundImg from "../images/background.png";
 import maskImg from "../images/mask.png";
+import {changeResultImageState, ResultImageState} from "../slices/result-image-state";
 
 declare namespace IDalgonaCanvas {
     export interface IProps {
@@ -58,13 +59,10 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
     const dispatch = useDispatch();
 
     React.useEffect(() => {
-        if (dalgonaState.download) {
+        if (dalgonaState.generate) {
             downloadImage();
-            const newState:DalgonaState = {...dalgonaState};
-            newState.download = false;
-            dispatch(changeDalgonaState(newState));
         }
-    }, [dalgonaState.download]);
+    }, [dalgonaState.generate]);
 
     React.useEffect(() => {
         buildPictureCanvasAsync(imageRelativePos.x, imageRelativePos.y).then();
@@ -154,18 +152,14 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         downloadContext.drawImage(backgroundCanvas, 0, 0);
         downloadContext.drawImage(pictureCanvas, 0, 0);
 
-        const url = downloadCanvas.toDataURL().replace("image/png", "image/octet-stream");
-        // const url = downloadCanvas.toDataURL();
+        const newResultImageState:ResultImageState = {
+            dataUrl: downloadCanvas.toDataURL()
+        };
+        dispatch(changeResultImageState(newResultImageState));
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute(
-            "download",
-            "dalgona.png",
-        );
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode?.removeChild(link);
+        const newDalgonaState:DalgonaState = {...dalgonaState};
+        newDalgonaState.generate = false;
+        dispatch(changeDalgonaState(newDalgonaState));
     }
 
     React.useEffect(() => {
@@ -182,6 +176,7 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
 
         onLoading(true);
 
+        dispatch(changeResultImageState({dataUrl:undefined}));
 
         const imageMask = imageMaskRef.current!;
         imageMask.onload = () => {
@@ -244,7 +239,7 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         return pixels;
     }
 
-    const processImage = async () => {
+    const processImage = () => {
         const canvasEdge = canvasEdgeRef.current!;
 
         const threshold1 = dalgonaState.threshold1 ?? 100;

@@ -9,6 +9,7 @@ import DalgonaForm from "./components/dalgona-form";
 import DalgonaCanvas from "./components/dalgona-canvas";
 import DalgonaHeader from "./components/dalgona-header";
 import DalgonaFooter from "./components/dalgona-footer";
+import DalgonaResult from "./components/dalgona-result";
 
 function App() {
     const [imgBuf, setImgBuf] = React.useState<ArrayBuffer>();
@@ -26,6 +27,9 @@ function App() {
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <DalgonaForm onClickGenerate={onClickGenerate} />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                        <DalgonaResult />
                     </Grid>
                 </Grid>
             </Container>

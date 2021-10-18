@@ -8,7 +8,7 @@ export interface DalgonaState {
     isLoading: boolean;
     threshold2?: number;
     threshold1?: number;
-    download: boolean;
+    generate: boolean;
 }
 
 export const dalgonaState = createSlice({
@@ -16,7 +16,7 @@ export const dalgonaState = createSlice({
     initialState: {
         scale: 1.0,
         isLoading: false,
-        download: false,
+        generate: false,
     } as DalgonaState,
     reducers: {
         changeDalgonaState(state, action: PayloadAction<DalgonaState>) {

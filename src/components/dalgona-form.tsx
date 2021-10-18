@@ -63,7 +63,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
     }, [dalgonaState.isLoading])
 
 
-    const onClickGenerateBtn = async () => {
+    const onClickApplyBtn = async () => {
         if (imgFile === undefined) {
             alert("사용할 이미지를 선택해주세요.");
             return;
@@ -136,9 +136,9 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
         onChangeUpperThreshold(newUt);
     }
 
-    const onClickDownloadBtn = () => {
+    const onClickGenerateBtn = () => {
         const newState:DalgonaState = {...dalgonaState};
-        newState.download = true;
+        newState.generate = true;
         dispatch(changeDalgonaState(newState));
 
         gtag.event({
@@ -307,16 +307,16 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                     <Grid item xs={6}>
                                         <Button
                                             variant="outlined"
-                                            onClick={onClickGenerateBtn}
+                                            onClick={onClickApplyBtn}
                                             startIcon={<AutoFixHighIcon/>} >
-                                            Generate
+                                            Apply
                                         </Button>
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Button variant="outlined"
-                                                onClick={onClickDownloadBtn}
+                                                onClick={onClickGenerateBtn}
                                                 startIcon={<DownloadIcon/>} >
-                                            Download
+                                            Generate
                                         </Button>
                                     </Grid>
                                 </>
