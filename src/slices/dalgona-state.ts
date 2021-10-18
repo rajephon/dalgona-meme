@@ -6,8 +6,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface DalgonaState {
     scale: number;
     isLoading: boolean;
-    ut?: number;
-    lt?: number;
+    threshold2?: number;
+    threshold1?: number;
     download: boolean;
 }
 

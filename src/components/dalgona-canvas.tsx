@@ -3,9 +3,9 @@
 
 import React, {FunctionComponent} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import cv from "@techstark/opencv-js";
 import {ReducerType} from "../rootReducer";
 import {DalgonaState, changeDalgonaState} from "../slices/dalgona-state";
-import {detect} from "../js-canny-edge-detector/canny-edge-detector";
 import backgroundImg from "../images/background.png";
 import maskImg from "../images/mask.png";
 
@@ -200,8 +200,9 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
 
                 ctx.drawImage(imagePicture, 0, 0, imagePicture.width, imagePicture.height);
                 ctx.save();
-                const imageData = ctx!.getImageData(0, 0, imagePicture.width, imagePicture.height);
-                detect(imageData.data as any as Uint8Array, imagePicture.width, imagePicture.height, dalgonaState.lt, dalgonaState.ut, onDetectCallback);
+                // const imageData = ctx!.getImageData(0, 0, imagePicture.width, imagePicture.height);
+                // detect(imageData.data as any as Uint8Array, imagePicture.width, imagePicture.height, dalgonaState.threshold1, dalgonaState.threshold2, onDetectCallback);
+                processImage();
 
                 console.log("onload");
             };
@@ -243,19 +244,28 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         return pixels;
     }
 
-    const onDetectCallback = async ({
-                                        type,
-                                        data,
-                                        threshold
-                                    }: { type: string, data?: number[], threshold?: { lt: number, ut: number } }) => {
-        console.log(`type: ${type}`);
-        if (data === undefined)
-            return;
+    const processImage = async () => {
         const canvasEdge = canvasEdgeRef.current!;
+
+        const threshold1 = dalgonaState.threshold1 ?? 100;
+        const threshold2 = dalgonaState.threshold2 ?? 100;
+
+        const img = cv.imread(canvasEdge);
+
+        // to gray scale
+        const imgGray = new cv.Mat();
+        cv.cvtColor(img, imgGray, cv.COLOR_BGR2GRAY);
+
+        // detect edges using Canny
+        const edges = new cv.Mat();
+        cv.Canny(imgGray, edges, threshold1, threshold2);
+        cv.imshow(canvasEdge, edges);
+
         const ctx = canvasEdge!.getContext('2d')!;
+        const imageData = ctx.getImageData(0, 0, canvasEdge.width, canvasEdge.height);
         ctx.clearRect(0, 0, canvasEdge.width, canvasEdge.height)
 
-        const pixels = postprocess(data);
+        const pixels = postprocess(Array.from(new Uint8Array(imageData.data.buffer)));
 
         const newImageData = new ImageData(pixels, canvasEdge.width, canvasEdge.height);
         ctx.putImageData(newImageData, 0, 0);
@@ -276,12 +286,13 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         imageEdge.onload = async () => {
             await buildPictureCanvasAsync(relativePosX, relativePosY);
 
-            const newState = {...dalgonaState};
+            const newState:DalgonaState = {...dalgonaState};
             newState.isLoading = false;
-            if (threshold) {
-                newState.lt = threshold.lt;
-                newState.ut = threshold.ut;
-            }
+            if (newState.threshold1 === undefined)
+                newState.threshold1 = threshold1;
+            if (newState.threshold2 === undefined)
+                newState.threshold2 = threshold2;
+
             dispatch(changeDalgonaState(newState));
         }
 

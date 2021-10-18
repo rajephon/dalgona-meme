@@ -46,17 +46,17 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
     }, [scale]);
 
     React.useEffect(() => {
-        if (dalgonaState.lt === lt)
+        if (dalgonaState.threshold1 === lt)
             return;
 
-        setLt(dalgonaState?.lt?.toFixed(2) ?? "");
-    }, [dalgonaState.lt]);
+        setLt(dalgonaState?.threshold1?.toFixed(2) ?? "");
+    }, [dalgonaState.threshold1]);
 
     React.useEffect(() => {
-        if (dalgonaState.ut === ut)
+        if (dalgonaState.threshold2 === ut)
             return;
-        setUt(dalgonaState?.ut?.toFixed(2) ?? "");
-    }, [dalgonaState.ut]);
+        setUt(dalgonaState?.threshold2?.toFixed(2) ?? "");
+    }, [dalgonaState.threshold2]);
 
     React.useEffect(() => {
         console.log(`dalgonaState.isLoading: ${dalgonaState.isLoading}`);
@@ -110,7 +110,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
         setLt(newLt);
 
         const newState: DalgonaState = {...dalgonaState};
-        newState.lt = (typeof newLt === "number") ? newLt : undefined;
+        newState.threshold1 = (typeof newLt === "number") ? newLt : undefined;
         dispatch(changeDalgonaState(newState));
     }
 
@@ -118,7 +118,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
         setUt(newUt);
 
         const newState: DalgonaState = {...dalgonaState};
-        newState.ut = (typeof newUt === "number") ? newUt : undefined;
+        newState.threshold2 = (typeof newUt === "number") ? newUt : undefined;
         dispatch(changeDalgonaState(newState));
     }
 
@@ -164,13 +164,13 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                     <Box>
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs={6}>
-                                <Typography id="lt-slider" gutterBottom>Lower Threshold (0-1)</Typography>
+                                <Typography id="lt-slider" gutterBottom>Threshold 1</Typography>
                             </Grid>
                             <Grid item xs={6}>
                                 <FormGroup>
                                     <FormControlLabel control={<Checkbox
                                         disabled={dalgonaState.isLoading}
-                                        checked={dalgonaState.lt === undefined}
+                                        checked={dalgonaState.threshold1 === undefined}
                                         onChange={onChangeLtAutoCheckbox}
                                     />} label={"auto"}/>
                                 </FormGroup>
@@ -183,11 +183,11 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                 <Slider track={false}
                                         aria-labelledby="lt-slider"
                                         valueLabelDisplay="auto"
-                                        value={dalgonaState.lt === undefined ? 0.0 : dalgonaState.lt}
+                                        value={dalgonaState.threshold1 === undefined ? 0.0 : dalgonaState.threshold1}
                                         onChange={onChangeSlider(onChangeLowerThreshold)}
-                                        step={0.01}
+                                        step={1}
                                         min={0}
-                                        max={1.0}
+                                        max={255}
                                         disabled={dalgonaState.isLoading}
                                 />
                             </Grid>
@@ -197,10 +197,10 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                     size="small"
                                     inputProps={{
                                         min: 0,
-                                        max: 1,
-                                        step: 0.01,
+                                        max: 255,
+                                        step: 1,
                                         type: "number",
-                                        'aria-labelledby': "lt-slider",
+                                        'aria-labelledby': "threshold1-slider",
                                     }}
                                     onChange={onChangeInput(onChangeLowerThreshold)}
                                     disabled={dalgonaState.isLoading}
@@ -213,14 +213,14 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs={6}>
                                 <Typography id="ut-slider" gutterBottom>
-                                    Upper Threshold (0-1)
+                                    Threshold 2
                                 </Typography>
                             </Grid>
                             <Grid item xs={6}>
                                 <FormGroup>
                                     <FormControlLabel control={<Checkbox
                                         disabled={dalgonaState.isLoading}
-                                        checked={dalgonaState.ut === undefined}
+                                        checked={dalgonaState.threshold2 === undefined}
                                         onChange={onChangeUtAutoCheckbox}
                                     />} label={"auto"}/>
                                 </FormGroup>
@@ -233,11 +233,11 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                 <Slider track={false}
                                         aria-labelledby="ut-slider"
                                         valueLabelDisplay="auto"
-                                        value={dalgonaState?.ut ?? 0.0}
+                                        value={dalgonaState?.threshold2 ?? 0.0}
                                         onChange={onChangeSlider(onChangeUpperThreshold)}
-                                        step={0.01}
+                                        step={1}
                                         min={0}
-                                        max={1.0}
+                                        max={255}
                                         disabled={dalgonaState.isLoading}
                                 />
                             </Grid>
@@ -247,10 +247,10 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                     size="small"
                                     inputProps={{
                                         min: 0,
-                                        max: 1,
-                                        step: 0.01,
+                                        max: 255,
+                                        step: 1,
                                         type: "number",
-                                        'aria-labelledby': "ut-slider",
+                                        'aria-labelledby': "threshold2-slider",
                                     }}
                                     onChange={onChangeInput(onChangeUpperThreshold)}
                                     disabled={dalgonaState.isLoading}

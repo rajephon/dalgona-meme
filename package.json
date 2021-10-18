@@ -10,6 +10,7 @@
     "@mui/lab": "^5.0.0-alpha.51",
     "@mui/material": "^5.0.2",
     "@reduxjs/toolkit": "^1.6.2",
+    "@techstark/opencv-js": "^4.5.4-release.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
