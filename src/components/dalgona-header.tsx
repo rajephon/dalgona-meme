@@ -7,10 +7,11 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from '@mui/material/Toolbar';
 
 const DalgonaHeader = () => {
-    return <AppBar position={"static"}>
+    return <AppBar position={"static"} style={{backgroundColor:"white", color:"#333", boxShadow:"none", border: "1px solid #ddd"}}>
         <Toolbar>
-            <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                Dalgona meme generator
+            {/*<h4>Dalgona meme generator</h4>*/}
+            <Typography variant="h5" component="h5" sx={{flexGrow: 1, fontWeight:600}}>
+                <span style={{color:"#ab9065"}}>Dalgona</span> meme generator
             </Typography>
         </Toolbar>
     </AppBar>;

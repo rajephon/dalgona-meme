@@ -1,25 +1,60 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Dalgona meme generator",
+  "description": "Dalgona meme generator",
+  "short_name": "Dalgona",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/icons/favicon-72x72.png",
+      "type": "image/png",
+      "sizes": "72x72",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo192.png",
+      "src": "/icons/favicon-96x96.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "96x96",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo512.png",
+      "src": "/icons/favicon-128x128.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "128x128",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/favicon-144x144.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/favicon-152x152.png",
+      "type": "image/png",
+      "sizes": "152x152",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/favicon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/favicon-384x384.png",
+      "type": "image/png",
+      "sizes": "384x384",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/favicon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "scope": "/",
+  "start_url": "/?source=pwa",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff"
 }

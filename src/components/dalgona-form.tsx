@@ -12,7 +12,6 @@ import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import Input from "@mui/material/Input";
 import Checkbox from "@mui/material/Checkbox";
 import {DalgonaState, changeDalgonaState} from "../slices/dalgona-state";
 import FormGroup from "@mui/material/FormGroup";
@@ -34,6 +33,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
     const [scale, setScale] = React.useState<number | string>(1.0);
     const [lt, setLt] = React.useState<number | string>("");
     const [ut, setUt] = React.useState<number | string>("");
+    const [needApply, setNeedApply] = React.useState<boolean>(false);
     const dalgonaState = useSelector<ReducerType, DalgonaState>(state => state.dalgonaState);
     const dispatch = useDispatch();
 
@@ -76,9 +76,11 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
         gtag.event({
             action: "generate",
             category: "click",
-            label: JSON.stringify({elapsed:delta}),
+            label: JSON.stringify({elapsed: delta}),
             value: 0
         });
+
+        setNeedApply(false);
     }
 
     const onChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,6 +90,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
             const file = e.currentTarget.files[0];
             setImgFile(file);
         }
+        setNeedApply(true);
     }
 
     const onChangeSlider = (setValueCallback: (value: number) => void) => {
@@ -108,6 +111,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
 
     const onChangeLowerThreshold = (newLt: number | string) => {
         setLt(newLt);
+        setNeedApply(true);
 
         const newState: DalgonaState = {...dalgonaState};
         newState.threshold1 = (typeof newLt === "number") ? newLt : undefined;
@@ -116,6 +120,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
 
     const onChangeUpperThreshold = (newUt: number | string) => {
         setUt(newUt);
+        setNeedApply(true);
 
         const newState: DalgonaState = {...dalgonaState};
         newState.threshold2 = (typeof newUt === "number") ? newUt : undefined;
@@ -137,7 +142,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
     }
 
     const onClickGenerateBtn = () => {
-        const newState:DalgonaState = {...dalgonaState};
+        const newState: DalgonaState = {...dalgonaState};
         newState.generate = true;
         dispatch(changeDalgonaState(newState));
 
@@ -151,181 +156,142 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
 
     return (
         <form>
-            <input type="file" id="input-photo" accept="image/*" onChange={onChangeFileInput}
-                   disabled={dalgonaState.isLoading}/>
-            <Tooltip title="Select image">
-                <>
-                    <label htmlFor="input-photo">
-                        <IconButton color="primary" aria-label="upload picture" component="span"
-                                    disabled={dalgonaState.isLoading}>
-                            <PhotoCamera fontSize="large"/>
-                        </IconButton>
-                    </label>
-                    <Box>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={6}>
-                                <Typography id="lt-slider" gutterBottom>Threshold 1</Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FormGroup>
-                                    <FormControlLabel control={<Checkbox
-                                        disabled={dalgonaState.isLoading}
-                                        checked={dalgonaState.threshold1 === undefined}
-                                        onChange={onChangeLtAutoCheckbox}
-                                    />} label={"auto"}/>
-                                </FormGroup>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Box>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={10}>
-                                <Slider track={false}
-                                        aria-labelledby="lt-slider"
-                                        valueLabelDisplay="auto"
-                                        value={dalgonaState.threshold1 === undefined ? 0.0 : dalgonaState.threshold1}
-                                        onChange={onChangeSlider(onChangeLowerThreshold)}
-                                        step={1}
-                                        min={0}
-                                        max={255}
-                                        disabled={dalgonaState.isLoading}
-                                />
-                            </Grid>
-                            <Grid item xs>
-                                <Input
-                                    value={lt}
-                                    size="small"
-                                    inputProps={{
-                                        min: 0,
-                                        max: 255,
-                                        step: 1,
-                                        type: "number",
-                                        'aria-labelledby': "threshold1-slider",
-                                    }}
-                                    onChange={onChangeInput(onChangeLowerThreshold)}
-                                    disabled={dalgonaState.isLoading}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Box>
+            <Box>
+                <input type="file" id="input-photo" accept="image/*" onChange={onChangeFileInput}
+                       disabled={dalgonaState.isLoading}/>
+                <Tooltip title="Select image">
+                    <>
+                        <label htmlFor="input-photo">
+                            <IconButton color="primary" aria-label="upload picture" component="span"
+                                        disabled={dalgonaState.isLoading}>
+                                <PhotoCamera fontSize="large"/>
+                            </IconButton>
+                        </label>
+                    </>
+                </Tooltip>
+            </Box>
+            <Box>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={6}>
+                        <Typography id="lt-slider" gutterBottom>Threshold 1</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox
+                                disabled={dalgonaState.isLoading}
+                                checked={dalgonaState.threshold1 === undefined}
+                                onChange={onChangeLtAutoCheckbox}
+                            />} label={"auto"}/>
+                        </FormGroup>
+                    </Grid>
+                </Grid>
+            </Box>
+            <Box>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12}>
+                        <Slider track={false}
+                                aria-labelledby="lt-slider"
+                                valueLabelDisplay="auto"
+                                value={dalgonaState.threshold1 === undefined ? 0.0 : dalgonaState.threshold1}
+                                onChange={onChangeSlider(onChangeLowerThreshold)}
+                                step={1}
+                                min={0}
+                                max={255}
+                                disabled={dalgonaState.isLoading}
+                        />
+                    </Grid>
+                </Grid>
+            </Box>
 
-                    <Box>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={6}>
-                                <Typography id="ut-slider" gutterBottom>
-                                    Threshold 2
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FormGroup>
-                                    <FormControlLabel control={<Checkbox
-                                        disabled={dalgonaState.isLoading}
-                                        checked={dalgonaState.threshold2 === undefined}
-                                        onChange={onChangeUtAutoCheckbox}
-                                    />} label={"auto"}/>
-                                </FormGroup>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Box>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={10}>
-                                <Slider track={false}
-                                        aria-labelledby="ut-slider"
-                                        valueLabelDisplay="auto"
-                                        value={dalgonaState?.threshold2 ?? 0.0}
-                                        onChange={onChangeSlider(onChangeUpperThreshold)}
-                                        step={1}
-                                        min={0}
-                                        max={255}
-                                        disabled={dalgonaState.isLoading}
-                                />
-                            </Grid>
-                            <Grid item xs>
-                                <Input
-                                    value={ut}
-                                    size="small"
-                                    inputProps={{
-                                        min: 0,
-                                        max: 255,
-                                        step: 1,
-                                        type: "number",
-                                        'aria-labelledby': "threshold2-slider",
-                                    }}
-                                    onChange={onChangeInput(onChangeUpperThreshold)}
-                                    disabled={dalgonaState.isLoading}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Box>
-                        <Typography id="scale-slider" gutterBottom>
-                            Image scale
+            <Box>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={6}>
+                        <Typography id="ut-slider" gutterBottom>
+                            Threshold 2
                         </Typography>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={10}>
-                                <Slider track={false}
-                                        aria-labelledby="scale-slider"
-                                        valueLabelDisplay="auto"
-                                        value={typeof scale === "number" ? scale : 1.0}
-                                        onChange={onChangeSlider(setScale)}
-                                        step={0.1}
-                                        min={0.1}
-                                        max={2.0}
-                                        disabled={dalgonaState.isLoading}
-                                />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox
+                                disabled={dalgonaState.isLoading}
+                                checked={dalgonaState.threshold2 === undefined}
+                                onChange={onChangeUtAutoCheckbox}
+                            />} label={"auto"}/>
+                        </FormGroup>
+                    </Grid>
+                </Grid>
+            </Box>
+            <Box>
+                <Grid container spacing={2} alignItems="center">
+                    {/*<Grid item xs={1}/>*/}
+                    <Grid item xs={12}>
+                        <Slider track={false}
+                                aria-labelledby="ut-slider"
+                                valueLabelDisplay="auto"
+                                value={dalgonaState?.threshold2 ?? 0.0}
+                                onChange={onChangeSlider(onChangeUpperThreshold)}
+                                step={1}
+                                min={0}
+                                max={255}
+                                disabled={dalgonaState.isLoading}
+                        />
+                    </Grid>
+                </Grid>
+            </Box>
+            <Box>
+                <Typography id="scale-slider" gutterBottom>
+                    Image scale
+                </Typography>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs>
+                        <Slider track={false}
+                                aria-labelledby="scale-slider"
+                                valueLabelDisplay="auto"
+                                value={typeof scale === "number" ? scale : 1.0}
+                                onChange={onChangeSlider(setScale)}
+                                step={0.1}
+                                min={0.1}
+                                max={3.0}
+                                disabled={dalgonaState.isLoading}
+                        />
+                    </Grid>
+                </Grid>
+            </Box>
+            <Box style={{marginTop: "18px"}}>
+                <Grid container spacing={2} alignItems="center">
+                    {dalgonaState.isLoading ?
+                        <>
+                            <Grid item xs={5}/>
+                            <Grid item xs={2}>
+                                <CircularProgress/>
                             </Grid>
-                            <Grid item xs>
-                                <Input
-                                    value={scale}
-                                    size="small"
-                                    inputProps={{
-                                        min: 0.1,
-                                        max: 2,
-                                        step: 0.1,
-                                        type: "number",
-                                        'aria-labelledby': "scale-slider",
-                                    }}
-                                    onChange={onChangeInput(setScale)}
-                                    disabled={dalgonaState.isLoading}
-                                />
+                            <Grid item xs={5}/>
+                        </>
+                        :
+                        <>
+                            <Grid item xs={6}>
+                                <Button
+                                    style={{width: "100%"}}
+                                    variant={needApply?"contained":"outlined"}
+                                    onClick={onClickApplyBtn}
+                                    startIcon={<AutoFixHighIcon/>}>
+                                    Apply
+                                </Button>
                             </Grid>
-                        </Grid>
-                    </Box>
-                    <Box style={{marginTop:"18px"}}>
-                        <Grid container spacing={2} alignItems="center">
-                            {dalgonaState.isLoading ?
-                                <>
-                                    <Grid item xs={5} />
-                                    <Grid item xs={2}>
-                                        <CircularProgress/>
-                                    </Grid>
-                                    <Grid item xs={5} />
-                                </>
-                                :
-                                <>
-                                    <Grid item xs={6}>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={onClickApplyBtn}
-                                            startIcon={<AutoFixHighIcon/>} >
-                                            Apply
-                                        </Button>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Button variant="outlined"
-                                                onClick={onClickGenerateBtn}
-                                                startIcon={<DownloadIcon/>} >
-                                            Generate
-                                        </Button>
-                                    </Grid>
-                                </>
-                            }
+                            <Grid item xs={6}>
+                                <Button
+                                    style={{width: "100%"}}
+                                    variant="outlined"
+                                    onClick={onClickGenerateBtn}
+                                    startIcon={<DownloadIcon/>}>
+                                    Generate
+                                </Button>
+                            </Grid>
+                        </>
+                    }
 
-                        </Grid>
-                    </Box>
-                </>
-            </Tooltip>
+                </Grid>
+            </Box>
         </form>
     )
 };
