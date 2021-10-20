@@ -6,12 +6,18 @@ import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from '@mui/material/Toolbar';
 
+const style: React.CSSProperties = {
+    backgroundColor: "#d4366e",
+    color: "#222",
+    boxShadow: "none",
+    borderWidth: "0",
+};
+
 const DalgonaHeader = () => {
-    return <AppBar position={"static"} style={{backgroundColor:"white", color:"#333", boxShadow:"none", border: "1px solid #ddd"}}>
+    return <AppBar position={"static"} style={style}>
         <Toolbar>
-            {/*<h4>Dalgona meme generator</h4>*/}
-            <Typography variant="h5" component="h5" sx={{flexGrow: 1, fontWeight:600}}>
-                <span style={{color:"#ab9065"}}>Dalgona</span> meme generator
+            <Typography variant="h5" component="h5" sx={{flexGrow: 1, fontWeight: 600}}>
+                <span style={{color: "#F5DCB4FF"}}>Dalgona</span> meme generator
             </Typography>
         </Toolbar>
     </AppBar>;
