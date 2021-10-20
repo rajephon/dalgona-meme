@@ -3,3 +3,10 @@
  Licensed under the MIT license. See LICENSE file in the project root for details.
  */
 
+#dalgona-header {
+    background-color: #d4366e;
+    color: #222;
+    box-shadow: none;
+    border-width: 0;
+}
+

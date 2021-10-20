@@ -28,6 +28,10 @@ declare namespace IDalgonaForm {
     }
 }
 
+const checkboxStyle:React.CSSProperties = {
+    color: "#ddd",
+};
+
 const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) => {
     const [imgFile, setImgFile] = React.useState<File>();
     const [scale, setScale] = React.useState<number | string>(1.0);
@@ -181,6 +185,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                 disabled={dalgonaState.isLoading}
                                 checked={dalgonaState.threshold1 === undefined}
                                 onChange={onChangeLtAutoCheckbox}
+                                style={checkboxStyle}
                             />} label={"auto"}/>
                         </FormGroup>
                     </Grid>
@@ -216,6 +221,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
                                 disabled={dalgonaState.isLoading}
                                 checked={dalgonaState.threshold2 === undefined}
                                 onChange={onChangeUtAutoCheckbox}
+                                style={checkboxStyle}
                             />} label={"auto"}/>
                         </FormGroup>
                     </Grid>
