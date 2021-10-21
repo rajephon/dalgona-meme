@@ -20,6 +20,10 @@ just start.
 yarn run start # or npm run start
 ```
 
+## Thanks to
+
+[@jyalways7](https://github.com/jyalways7)
+
 # License
 
 See [LICENSE](https://github.com/rajephon/dalgona-meme/blob/master/LICENSE)
