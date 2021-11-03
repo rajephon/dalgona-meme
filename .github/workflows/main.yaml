@@ -27,7 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - run: npm ci
+#      - run: npm ci # 추후 코드 정리후 주석 해제하기 by rajephon on 2021-11-04
       - run: npm run predeploy
 
       - name: Deploy with gh-pages
