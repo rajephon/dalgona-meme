@@ -58,14 +58,18 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
     const dalgonaState = useSelector<ReducerType, DalgonaState>(state => state.dalgonaState);
     const dispatch = useDispatch();
 
+
     React.useEffect(() => {
         if (dalgonaState.generate) {
             downloadImage();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dalgonaState.generate]);
+
 
     React.useEffect(() => {
         buildPictureCanvasAsync(imageRelativePos.x, imageRelativePos.y).then();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dalgonaState.scale]);
 
     const loadImageAsync = async (imageUrl: string): Promise<HTMLImageElement> => {
@@ -162,9 +166,12 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
         dispatch(changeDalgonaState(newDalgonaState));
     }
 
+
     React.useEffect(() => {
         resetBackgroundAsync().then();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [canvasBackgroundRef]);
+
 
     React.useEffect(() => {
         if (imgBuf === undefined)
@@ -205,6 +212,7 @@ const DalgonaCanvas: FunctionComponent<IDalgonaCanvas.IProps> = ({imgBuf}) => {
 
         }
         imageMask.src = maskImg;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [imgBuf, imagePictureRef, imageMaskRef]);
 
     const onLoading = (isLoading: boolean) => {

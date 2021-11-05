@@ -47,6 +47,7 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
             newState.scale = scale;
             dispatch(changeDalgonaState(newState));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scale]);
 
     React.useEffect(() => {
@@ -54,12 +55,14 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
             return;
 
         setLt(dalgonaState?.threshold1?.toFixed(2) ?? "");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dalgonaState.threshold1]);
 
     React.useEffect(() => {
         if (dalgonaState.threshold2 === ut)
             return;
         setUt(dalgonaState?.threshold2?.toFixed(2) ?? "");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dalgonaState.threshold2]);
 
     React.useEffect(() => {
@@ -104,12 +107,6 @@ const DalgonaForm: FunctionComponent<IDalgonaForm.IProp> = ({onClickGenerate}) =
             } else {
                 console.error(`invalid type of newValue (type: ${typeof newValue})`);
             }
-        }
-    }
-
-    const onChangeInput = (setValueCallback: (value: number | string) => void) => {
-        return (e: React.ChangeEvent<HTMLInputElement>) => {
-            setValueCallback((e.target.value === "") ? "" : Number(e.target.value));
         }
     }
 

@@ -18,7 +18,7 @@ const DalgonaResult = () => {
 
     return <Container maxWidth={"lg"} sx={{marginTop: "15px", paddingTop: "15px", borderTop:"1px solid #eee"}}>
         {resultImageState.dataUrl && <>
-            <img src={resultImageState.dataUrl} style={{width: "100%"}} />
+            <img src={resultImageState.dataUrl} style={{width: "100%"}} alt="result dalgona meme" />
             <AlwaysScrollToBottom/>
         </>}
     </Container>
